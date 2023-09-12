@@ -1,0 +1,5 @@
+# Carpeta de entorno virtual
+env/
+
+# Archivo PyWhatKit_DB.txt
+PyWhatKit_DB.txt
