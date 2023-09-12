@@ -12,15 +12,19 @@ from pydantic import BaseModel
 app = FastAPI()
 
 def send_emergency_alert(mensaje):
-    hora_actual = datetime.datetime.now()
-    hora_envio = hora_actual.hour
-    minuto_envio = hora_actual.minute + 1  # Envía el mensaje 1 minuto después de la hora actual
-    print(f"Enviando mensaje: {mensaje}")
-        
-        # Reemplaza el número de teléfono con el que deseas enviar el mensaje
-    numero_destino = "+573224976097"
+    from twilio.rest import Client
 
-    kit.sendwhatmsg(numero_destino, mensaje, hora_envio, minuto_envio)
+    account_sid = 'AC4088660cb6f697068fae1a53e2b9befb'
+    auth_token = 'f1f51662d8b72e4940f87aa66d07dc0c'
+    client = Client(account_sid, auth_token)
+
+    message = client.messages.create(
+        from_='whatsapp:+14155238886',  # Número de WhatsApp que enviará el mensaje
+        body=f'{mensaje}',
+        to='whatsapp:+573224976097'  # Reemplaza con el número de WhatsApp al que deseas enviar el mensaje
+    )
+
+    print(message.sid)
 
 class Message(BaseModel):
     mensaje: str
@@ -30,7 +34,7 @@ def index(message: Message):
     send_emergency_alert(message.mensaje)
     return 'Mensaje enviado exitosamente'
 
-# if __name__ == '__main__':
-#     import uvicorn
-#     uvicorn.run("main:app", host='0.0.0.0', port=8000, reload=True)
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run("main:app", host='0.0.0.0', port=8000, reload=True)
 #     uvicorn main:app --host 0.0.0.0 --port 10000
