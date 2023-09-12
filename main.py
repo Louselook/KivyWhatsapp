@@ -1,3 +1,9 @@
+import os
+
+# Establecer una variable de entorno personalizada para evitar el error de DISPLAY
+os.environ['DISPLAY'] = ":0"
+
+# Ahora puedes importar pywhatkit sin problemas
 import pywhatkit as kit
 import datetime
 from fastapi import FastAPI
